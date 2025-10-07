@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -88,8 +90,12 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        NumberTriangle curr = this;
+        for (char i : path.toCharArray()) {
+            if (i == 'l') {curr = curr.left;}
+            else if (i == 'r') {curr = curr.right;}
+        }
+        return curr.root;
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -109,8 +115,8 @@ public class NumberTriangle {
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-
         // TODO define any variables that you want to use to store things
+        ArrayList<ArrayList<NumberTriangle>> allRows = new ArrayList<>();
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
@@ -123,11 +129,34 @@ public class NumberTriangle {
             System.out.println(line);
 
             // TODO process the line
+            String[] nums = line.trim().split(" ");
+            ArrayList<NumberTriangle> row = new ArrayList<>();
+            for (String num : nums) {
+                int val =  Integer.parseInt(num);
+                row.add(new NumberTriangle(val));
+            }
+            allRows.add(row);
 
             //read the next line
             line = br.readLine();
         }
         br.close();
+
+        int i = 0;
+        for (i = 0; i < allRows.size() - 1; i++) {
+            ArrayList<NumberTriangle> curr =  allRows.get(i);
+            ArrayList<NumberTriangle> blw = allRows.get(i + 1);
+
+            for (int j = 0; j < curr.size(); j++) {
+                curr.get(j).setLeft(blw.get(j));
+                curr.get(j).setRight(blw.get(j + 1));
+            }
+        }
+
+        if (!allRows.isEmpty()) {
+            top = allRows.get(0).get(0);
+        }
+
         return top;
     }
 
@@ -142,3 +171,4 @@ public class NumberTriangle {
         System.out.println(mt.getRoot());
     }
 }
+"
