@@ -91,7 +91,7 @@ public class NumberTriangle {
      */
     public int retrieve(String path) {
         NumberTriangle curr = this;
-        for (char i : path.toCharArray()) {
+        for (char i : path.toCharArray()) { // loop
             if (i == 'l') {curr = curr.left;}
             else if (i == 'r') {curr = curr.right;}
         }
